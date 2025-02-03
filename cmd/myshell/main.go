@@ -10,15 +10,18 @@ import (
 var _ = fmt.Fprint
 
 func main() {
-	fmt.Fprint(os.Stdout, "$ ")
+	for {
 
-	// Wait for user input
-	command, err := bufio.NewReader(os.Stdin).ReadString('\n')
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error reading input:", err)
-		os.Exit(1)
+		fmt.Fprint(os.Stdout, "$ ")
+		
+		// Wait for user input
+		command, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error reading input:", err)
+			os.Exit(1)
+		}
+		
+		// commandから最後の文字(\n)を削除する
+		fmt.Println(command[:len(command)-1] + ": command not found")
 	}
-
-	// commandから最後の文字(\n)を削除する
-	fmt.Println(command[:len(command)-1] + ": command not found")
 }

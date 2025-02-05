@@ -10,6 +10,8 @@ import (
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
+var commands = []string{"echo", "type", "exit"}
+
 func main() {
 	for {
 
@@ -33,12 +35,26 @@ func main() {
 		switch commands[0] {
 			case "echo":
 				fmt.Println(strings.Join(commands[1:], " "))
+			case "type":
+				ok := checkBuiltin(commands[1])
+				if ok {
+					fmt.Println(commands[1] + " is a shell builtin")
+				} else {
+					fmt.Println(command + ": command not found")
+				}
 			default:
-			// commandから最後の文字(\n)を削除する
-			fmt.Println(command + ": command not found")
+				// commandから最後の文字(\n)を削除する
+				fmt.Println(command + ": command not found")
 				
 		}
-
-
 	}
+}
+
+func checkBuiltin(command string) bool {
+	for _, c := range commands {
+		if c == command {
+			return true
+		}
+	}
+	return false
 }

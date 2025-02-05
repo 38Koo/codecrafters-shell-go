@@ -39,8 +39,9 @@ func main() {
 				ok := checkBuiltin(commands[1])
 				if ok {
 					fmt.Println(commands[1] + " is a shell builtin")
+				} else {
+					fmt.Println("invalid_command: not found")
 				}
-				fmt.Println("invalid_command: not found")
 				
 			default:
 				// commandから最後の文字(\n)を削除する

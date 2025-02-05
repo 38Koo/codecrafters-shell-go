@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
@@ -26,8 +27,18 @@ func main() {
 		if command == "exit 0" {
 			os.Exit(0)
 		}
-		
-		// commandから最後の文字(\n)を削除する
-		fmt.Println(command + ": command not found")
+
+		commands := strings.Split(command, " ")
+
+		switch commands[0] {
+			case "echo":
+				fmt.Println(strings.Join(commands[1:], " "))
+			default:
+			// commandから最後の文字(\n)を削除する
+			fmt.Println(command + ": command not found")
+				
+		}
+
+
 	}
 }

@@ -40,7 +40,7 @@ func main() {
 				if ok {
 					fmt.Println(commands[1] + " is a shell builtin")
 				} else {
-					fmt.Println("invalid_command: not found")
+					fmt.Println(commands[1] + ": not found")
 				}
 				
 			default:

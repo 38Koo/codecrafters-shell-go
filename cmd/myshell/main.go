@@ -13,6 +13,9 @@ var _ = fmt.Fprint
 var commands = []string{"echo", "type", "exit"}
 
 func main() {
+	dirPath := "/usr/bin:/usr/local/bin:/bin"
+	paths := strings.Split(dirPath, ":")
+
 	for {
 
 		fmt.Fprint(os.Stdout, "$ ")
@@ -39,9 +42,16 @@ func main() {
 				ok := checkBuiltin(commands[1])
 				if ok {
 					fmt.Println(commands[1] + " is a shell builtin")
-				} else {
-					fmt.Println(commands[1] + ": not found")
+					break
+				} 
+				
+				p := checkValid(commands[1], paths)
+				if p != "" {
+					fmt.Println(commands[1] + " is " + p)
+					break
 				}
+
+				fmt.Println(commands[1] + ": not found")
 				
 			default:
 				// commandから最後の文字(\n)を削除する
@@ -58,4 +68,22 @@ func checkBuiltin(command string) bool {
 		}
 	}
 	return false
+}
+
+func checkValid(command string, paths []string) string {
+	for _, p := range paths {
+		files, err := os.ReadDir(p)
+		if err != nil {
+			fmt.Println("Error reading file:", err)
+			os.Exit(1)
+		}
+
+		for _, f := range files {
+			if f.Name() == command {
+				return p + "/" + f.Name()
+			}
+		}
+	}
+
+	return ""
 }

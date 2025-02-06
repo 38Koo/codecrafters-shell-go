@@ -13,7 +13,7 @@ var _ = fmt.Fprint
 var commands = []string{"echo", "type", "exit"}
 
 func main() {
-	dirPath := "/usr/bin:/usr/local/bin:/bin"
+	dirPath := os.Getenv("PATH")
 	paths := strings.Split(dirPath, ":")
 
 	for {

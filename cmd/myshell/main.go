@@ -10,7 +10,7 @@ import (
 // Ensures gofmt doesn't remove the "fmt" import in stage 1 (feel free to remove this!)
 var _ = fmt.Fprint
 
-var commands = []string{"echo", "type", "exit"}
+var builtinCommands = []string{"echo", "type", "exit"}
 
 func main() {
 	dirPath := os.Getenv("PATH")
@@ -62,7 +62,7 @@ func main() {
 }
 
 func checkBuiltin(command string) bool {
-	for _, c := range commands {
+	for _, c := range builtinCommands {
 		if c == command {
 			return true
 		}
@@ -72,15 +72,17 @@ func checkBuiltin(command string) bool {
 
 func checkValid(command string, paths []string) string {
 	for _, p := range paths {
-		files, err := os.ReadDir(p)
-		if err != nil {
-			fmt.Println("Error reading file:", err)
-			os.Exit(1)
-		}
 
-		for _, f := range files {
-			if f.Name() == command {
-				return p + "/" + f.Name()
+		// ファイルチェック
+		_, err := os.Stat(p)
+
+		if err == nil {
+			files, _ := os.ReadDir(p)
+			
+			for _, f := range files {
+				if f.Name() == command {
+					return p + "/" + f.Name()
+				}
 			}
 		}
 	}

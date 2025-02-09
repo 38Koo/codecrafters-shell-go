@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -54,6 +55,21 @@ func main() {
 				fmt.Println(commands[1] + ": not found")
 				
 			default:
+				p := checkValid(commands[0], paths)
+
+				if p != "" {
+					cmd := exec.Command(commands[0], commands[1:]...)
+					out, err := cmd.CombinedOutput()
+					if err != nil {
+						fmt.Println(err)
+					}
+					o := string(out)
+					// 末尾の空白を削除
+					fmt.Println(o[:len(o)-1])
+
+					break
+				}
+
 				// commandから最後の文字(\n)を削除する
 				fmt.Println(command + ": command not found")
 				
